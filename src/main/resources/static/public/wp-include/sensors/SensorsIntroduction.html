@@ -23,6 +23,50 @@
             background: none !important;
             padding: 0 !important;
         }
+        /* 新增样式 */
+        .hover-img-box {
+            position: relative;
+            display: inline-block;
+        }
+        .img-responsive {
+            position: relative;
+            display: block;
+            width: 100%; /* 固定宽度 */
+            height: 15%; /* 高度为容器的50% */
+        }
+        .text-bottom-left {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            color: white; /* 文字颜色 */
+            padding: 5px; /* 内边距 */
+            width: 100%; /* 确保宽度与图片一致 */
+            box-sizing: border-box; /* 包含内边距和边框 */
+            background-color: transparent; /* 设置文字背景色为透明 */
+            transition: bottom 0.3s ease; /* 添加过渡动画 */
+            z-index: 1; /* 确保文字在背景之上 */
+        }
+        /* 初始位置 */
+        .hover-img-text {
+            position: absolute;
+            bottom: 0; /* 文字默认位于底部 */
+            left: 0;
+            background-color: rgba(0, 0, 0, 0.7); /* 背景颜色 */
+            color: white; /* 文字颜色 */
+            padding: 5px 10px; /* 内边距 */
+            transition: bottom 0.3s ease, height 0.3s ease; /* 添加过渡动画 */
+            z-index: 1; /* 确保文字在背景之上 */
+            height: 40px; /* 初始高度为0 */
+        }
+        /* 鼠标悬停时的位置 */
+        .hover-img-box:hover .hover-img-text {
+            bottom: 0;
+            height: 40%;
+        }
+        .img-with-text {
+            position: relative;
+            overflow: hidden; /* 确保绝对定位的元素不会超出图片范围 */
+        }
     </style>
     <link rel="stylesheet" id="crayon-css" href="/css/crayon.min.css" media="all">
     <link rel="stylesheet" id="wp-block-library-css" href="/css/twentysixteen/style.min.css" media="all">
@@ -67,7 +111,7 @@
             <div class="site-header-main">
                 <div class="site-branding">
 
-                    <p class="site-title"><a href="/index.html" rel="home">D4C</a></p>
+                    <p class="site-title"><a href="/index.html" rel="home">北岭山创客未来</a></p>
                     <p class="site-description">Arduino集成传感器教学开发板</p>
                 </div><!-- .site-branding -->
 
@@ -124,14 +168,36 @@
                             <h1>1</h1>
                         </a><p><a href="/wp-include/sensors/Sensor1.html" rel="noopener noreferrer" target="_blank"></a><br>
                             111</p>
+                            <div class="rom">
+                                <div class="col-lg-2 hidden-md col-md-3 col-sm-4 col-xs-6">
+                                    <div class="hover-img-box">
+                                        <a href="/wp-include/sensors/Sensor1.html" target="_blank" class="ec_click_product">
+                                            <img src="/wp-include/pages/1.gif" class="img-responsive img-with-text">
+                                            <div class="hover-img-text text-bottom-left">传感器一号</div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <p></p>
                             <hr>
                             <p>&nbsp;<br>
                                 <a href="/wp-include/sensors/Sensor2.html" rel="noopener noreferrer" target="_blank"></a></p><a href="/wp-include/sensors/Sensor2.html" rel="noopener noreferrer" target="_blank">
                             <h1>2</h1>
                         </a><p><a href="/wp-include/sensors/Sensor2.html" rel="noopener noreferrer" target="_blank"></a><br>
                             222</p>
+                            <div class="rom">
+                                <div class="col-lg-2 hidden-md col-md-3 col-sm-4 col-xs-6">
+                                    <div class="hover-img-box">
+                                        <a href="/wp-include/sensors/Sensor2.html" target="_blank" class="ec_click_product">
+                                            <img src="/wp-include/pages/1.gif" class="img-responsive img-with-text">
+                                            <div class="hover-img-text text-bottom-left">传感器plus一号</div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <p></p>
+                            <hr>
                         </div><!-- .entry-content -->
-
 
                     </article><!-- #post-12200 -->
 
@@ -158,7 +224,7 @@
 
         <footer id="colophon" class="site-footer" role="contentinfo">
             <nav class="main-navigation" role="navigation" aria-label="页脚主菜单">
-                <div class="menu-%e7%ab%99%e7%82%b9%e5%af%bc%e8%88%aa-container"><ul id="menu-%e7%ab%99%e7%82%b9%e5%af%bc%e8%88%aa-1" class="primary-menu"><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-12974" aria-haspopup="true"><a href="/index.html">D4C</a><button class="dropdown-toggle" aria-expanded="false"><span class="screen-reader-text">展开子菜单</span></button>
+                <div class="menu-%e7%ab%99%e7%82%b9%e5%af%bc%e8%88%aa-container"><ul id="menu-%e7%ab%99%e7%82%b9%e5%af%bc%e8%88%aa-1" class="primary-menu"><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-12974" aria-haspopup="true"><a href="/index.html">北岭山创客未来</a><button class="dropdown-toggle" aria-expanded="false"><span class="screen-reader-text">展开子菜单</span></button>
                 </li>
                     <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-11817"><a href="/wp-include/else/tutorials.html">教程说明</a></li>
                     <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1383"><a href="/wp-include/else/us.html">关于我们</a></li>
@@ -166,7 +232,7 @@
 
 
             <div class="site-info">
-                <span class="site-title"><a href="/index.html" rel="home">D4C</a></span>
+                <span class="site-title"><a href="/index.html" rel="home">北岭山创客未来</a></span>
                 <a href="https://cn.wordpress.org/" class="imprint">
                     自豪				</a>
             </div><!-- .site-info -->
