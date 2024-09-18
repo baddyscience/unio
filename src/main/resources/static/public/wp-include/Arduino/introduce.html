@@ -64,6 +64,11 @@
 </head>
 
 <body class="page-template-default page page-id-12200 page-parent page-child parent-pageid-5645 custom-background wp-embed-responsive">
+
+<div id="floating-window" style="position: fixed; bottom: 70%; right: 20px; width: 30px; height: 100px; background-color: transparent; display: flex; justify-content: center; align-items: center; border-radius: 10px; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); z-index: 999; cursor: pointer; writing-mode: vertical-rl; transform: rotate(360deg);">
+    <a href="/wp-include/else/download.html" target="_blank" style="text-decoration: none; color: #333; font-size: 16px; writing-mode: vertical-rl;">下载链接</a>
+</div>
+
 <div id="page" class="site">
     <div class="site-inner">
         <a class="skip-link screen-reader-text" href="#content">跳至内容</a>
@@ -97,7 +102,7 @@
                                     <li id="menu-item-11249" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-11248"><a href="/wp-include/projects/project4.html">4-超音波感测模组的控制应用</a></li>
                                     <li id="menu-item-11250" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-11248"><a href="/wp-include/projects/project5.html">5-人体感测器的控制应用</a></li>
                                     <li id="menu-item-11251" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-11248"><a href="/wp-include/projects/project6.html">6-温度感测器的控制应用</a></li>
-                                    <li id="menu-item-11252" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-11248"><a href="/wp-include/projects/project7.html">7-蓝牙的控制应用</a></li>
+                                    <li id="menu-item-11252" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-11248"><a href="/wp-include/projects/project7.html">7-Wifi控制舵机</a></li>
                                 </ul>
                             </li>
 
@@ -125,7 +130,7 @@
                             <h1 class="entry-title">Arduino介绍</h1>	</header><!-- .entry-header -->
 
 
-                        <div class="entry-content">
+                        <div class="entry-content" id = "section1">
                             <p><a href="/index.html">首页</a> / 本页</p>
                             <a rel="noopener" target="_blank">
                             <h1>开发板介绍</h1>
@@ -152,7 +157,9 @@
                                     </li>
                                     <li><strong>兼容性：</strong>可以通过各种传感器、模块（如WiFi、蓝牙、显示屏等）和其他配件进行扩展，便于与其他电子元器件结合。</li>
                                 </ul>
-                                <a rel="noopener" target="_blank">
+                            </div>
+                            <div id = "section2">
+                                <a rel="noopener" target="_blank" >
                                 <h1>软件介绍</h1>
                                 </a>
                                 <p>
@@ -180,6 +187,11 @@
                         </label>
                         <button type="submit" class="search-submit"><span class="screen-reader-text">搜索</span></button>
                     </form>
+                </section><section id="text-4" class="widget widget_text"><h2 class="widget-title">目录</h2>
+                <div id="table-of-contents">
+                    <a href="#section1">开发板介绍</a><br>
+                    <a href="#section2">软件介绍</a>
+                </div>
                 </section><section id="text-14" class="widget widget_text"><h2 class="widget-title">版权声明</h2>			<div class="textwidget"><p><span style="color: #2e93ec;"><strong>本网站访问者可将本网站提供的内容或服务用于个人学习研究以及其他非商业性或非盈利性用途。除此以外,将本网站任何内容（包括图片，文字，视频，程序代码，电路设计）或服务用于任何商业或盈利用途时,须征得本网站及相关权利人的书面许可。</strong></span></p>
             </div>
             </section>	</aside><!-- .sidebar .widget-area -->

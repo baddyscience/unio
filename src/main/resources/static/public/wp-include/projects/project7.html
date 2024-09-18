@@ -1,10 +1,338 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="zh-CN" class="js"><head>
     <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="profile" href="https://gmpg.org/xfn/11">
+    <link href='https://fonts.loli.net/css?family=Open+Sans:400italic,700italic,700,400&subset=latin,latin-ext' rel='stylesheet' type='text/css' />
+    <script>(function(html){html.className = html.className.replace(/\bno-js\b/,'js')})(document.documentElement);</script>
+    <title>Ardunio集成传感器教学开发板 – Arduino开发</title>
+    <meta name="robots" content="max-image-preview:large">
+    <link rel="dns-prefetch" href="//s.w.org">
+    <script>
+        window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/13.0.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/13.0.1\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/www.taichi-maker.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=5.7.12"}};
+        !function(e,a,t){var n,r,o,i=a.createElement("canvas"),p=i.getContext&&i.getContext("2d");function s(e,t){var a=String.fromCharCode;p.clearRect(0,0,i.width,i.height),p.fillText(a.apply(this,e),0,0);e=i.toDataURL();return p.clearRect(0,0,i.width,i.height),p.fillText(a.apply(this,t),0,0),e===i.toDataURL()}function c(e){var t=a.createElement("script");t.src=e,t.defer=t.type="text/javascript",a.getElementsByTagName("head")[0].appendChild(t)}for(o=Array("flag","emoji"),t.supports={everything:!0,everythingExceptFlag:!0},r=0;r<o.length;r++)t.supports[o[r]]=function(e){if(!p||!p.fillText)return!1;switch(p.textBaseline="top",p.font="600 32px Arial",e){case"flag":return s([127987,65039,8205,9895,65039],[127987,65039,8203,9895,65039])?!1:!s([55356,56826,55356,56819],[55356,56826,8203,55356,56819])&&!s([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]);case"emoji":return!s([55357,56424,8205,55356,57212],[55357,56424,8203,55356,57212])}return!1}(o[r]),t.supports.everything=t.supports.everything&&t.supports[o[r]],"flag"!==o[r]&&(t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&t.supports[o[r]]);t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&!t.supports.flag,t.DOMReady=!1,t.readyCallback=function(){t.DOMReady=!0},t.supports.everything||(n=function(){t.readyCallback()},a.addEventListener?(a.addEventListener("DOMContentLoaded",n,!1),e.addEventListener("load",n,!1)):(e.attachEvent("onload",n),a.attachEvent("onreadystatechange",function(){"complete"===a.readyState&&t.readyCallback()})),(n=t.source||{}).concatemoji?c(n.concatemoji):n.wpemoji&&n.twemoji&&(c(n.twemoji),c(n.wpemoji)))}(window,document,window._wpemojiSettings);
+    </script><script src="/js/wp-emoji-release.min.js" type="text/javascript" defer=""></script>
+    <style>
+        img.wp-smiley,
+        img.emoji {
+            display: inline !important;
+            border: none !important;
+            box-shadow: none !important;
+            height: 1em !important;
+            width: 1em !important;
+            margin: 0 .07em !important;
+            vertical-align: -0.1em !important;
+            background: none !important;
+            padding: 0 !important;
+        }
+        .code-container {
+            display: flex;
+            border: 1px solid #ccc;
+            padding: 10px;
+            font-family: monospace;
+            width: 80%; /* 设置代码块宽度为80% */
+            max-width: 600px; /* 设置最大宽度 */
+            //max-height: 400px; /* 设置最大高度 */
+            overflow: auto; /* 超出部分显示滚动条 */
+            //margin: 20px auto; /* 上下外边距20px，水平居中 */
+            background-color: rgba(128, 128, 128, 0.1); /* 半透明的灰色背景 */
+            border-radius: 8px; /* 设置圆角 */
+        }
 
-</body>
-</html>
+        .line-numbers {
+            counter-reset: line;
+            padding-right: 10px;
+            border-right: 1px solid #ddd;
+            text-align: right;
+            color: gray;
+            padding-right: 5px; /* 行号区域右边距 */
+        }
+
+        .line-numbers span {
+            display: block;
+            counter-increment: line;
+            padding-right: 10px;
+        }
+
+        .code {
+            white-space: pre-wrap;
+            flex: 1;
+            padding-left: 10px; /* 代码区域左边距 */
+        }
+    </style>
+    <link rel="stylesheet" id="crayon-css" href="/css/crayon.min.css" media="all">
+    <link rel="stylesheet" id="wp-block-library-css" href="/css/twentysixteen/style.min.css" media="all">
+    <link rel="stylesheet" id="wp-block-library-theme-css" href="/css/theme.min.css" media="all">
+    <link rel="stylesheet" id="genericons-css" href="/Genericons/genericons.css?ver=20201208" media="all">
+    <link rel="stylesheet" id="twentysixteen-style-css" href="/css/twentysixteen/style.css?ver=20201208" media="all">
+    <link rel="stylesheet" id="twentysixteen-block-style-css" href="/css/twentysixteen/blocks.css?ver=20201208" media="all">
+    <!--[if lt IE 10]>
+    <link rel='stylesheet' id='twentysixteen-ie-css'  href='/css/ie.css' media='all' />
+    <![endif]-->
+    <!--[if lt IE 9]>
+    <link rel='stylesheet' id='twentysixteen-ie8-css'  href='/css/ie8.css' media='all' />
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel='stylesheet' id='twentysixteen-ie7-css'  href='/css/ie7.css' media='all' />
+    <![endif]-->
+    <script src="/js/jquery.min.js" id="jquery-core-js"></script>
+    <script src="/js/jquery-migrate.min.js" id="jquery-migrate-js"></script>
+    <script id="crayon_js-js-extra">
+        var CrayonSyntaxSettings = {"version":"_2.7.2_beta","is_admin":"0","ajaxurl":"/wp-admin/admin-ajax.php","prefix":"crayon-","setting":"crayon-setting","selected":"crayon-setting-selected","changed":"crayon-setting-changed","special":"crayon-setting-special","orig_value":"data-orig-value","debug":""};
+        var CrayonSyntaxStrings = {"copy":"Press %s to Copy, %s to Paste","minimize":"Click To Expand Code"};
+    </script>
+    <script src="/js/crayon.min.js" id="crayon_js-js"></script>
+    <!--[if lt IE 9]>
+    <script src='/js/html5.js' id='twentysixteen-html5-js'></script>
+    <![endif]-->
+    <style id="custom-background-css">
+        body.custom-background {
+            margin: 0;
+            height: 100vh; /* 确保背景覆盖整个视口 */
+            background: linear-gradient(to right, #b0b0b0, #40464d); /* 初始灰色渐变 */
+            transition: background 0.5s ease; /* 背景平滑过渡效果 */
+        }
+    </style>
+    <link rel="icon" href="/wp-include/pages/1.gif" sizes="32x32">
+    <link rel="icon" href="/wp-include/pages/1.gif" sizes="192x192">
+    <link rel="apple-touch-icon" href="/wp-include/pages/1.gif">
+    <meta name="msapplication-TileImage" content="/wp-include/pages/1.gif">
+</head>
+
+<body class="page-template-default page page-id-12200 page-parent page-child parent-pageid-5645 custom-background wp-embed-responsive">
+
+<div id="floating-window" style="position: fixed; bottom: 70%; right: 20px; width: 30px; height: 100px; background-color: transparent; display: flex; justify-content: center; align-items: center; border-radius: 10px; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); z-index: 999; cursor: pointer; writing-mode: vertical-rl; transform: rotate(360deg);">
+    <a href="/wp-include/else/download.html" target="_blank" style="text-decoration: none; color: #333; font-size: 16px; writing-mode: vertical-rl;">下载链接</a>
+</div>
+
+<div id="page" class="site">
+    <div class="site-inner">
+        <a class="skip-link screen-reader-text" href="#content">跳至内容</a>
+
+        <header id="masthead" class="site-header" role="banner">
+            <div class="site-header-main">
+                <div class="site-branding">
+
+                    <p class="site-title"><a href="/index.html" rel="home">北岭山创客未来</a></p>
+                    <p class="site-description">Arduino集成传感器教学开发板</p>
+                </div><!-- .site-branding -->
+
+                <button id="menu-toggle" class="menu-toggle">菜单</button>
+
+                <div id="site-header-menu" class="site-header-menu">
+                    <nav id="site-navigation" class="main-navigation" role="navigation" aria-label="主菜单">
+                        <div class="menu-%e7%ab%99%e7%82%b9%e5%af%bc%e8%88%aa-container"><ul id="menu-%e7%ab%99%e7%82%b9%e5%af%bc%e8%88%aa" class="primary-menu">
+                            <li id="menu-item-9846" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-9846"><a href="/wp-include/Arduino/introduce.html">arduino介绍</a></li>
+
+                            <li id="menu-item-9847" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-9847" aria-haspopup="true"><a href="/wp-include/sensors/SensorsIntroduction.html">传感器介绍</a><button class="dropdown-toggle" aria-expanded="false"><span class="screen-reader-text">展开子菜单</span></button>
+                                <ul class="sub-menu">
+                                    <li id="menu-item-13276" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-13276"><a href="/wp-include/sensors/Sensor1.html">模块简介</a></li>
+                                </ul>
+                            </li>
+
+                            <li id="menu-item-9850" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-9850" aria-haspopup="true"><a href="/wp-include/projects/ProjectTitle.html">项目教程</a><button class="dropdown-toggle" aria-expanded="false"><span class="screen-reader-text">展开子菜单</span></button>
+                                <ul class="sub-menu">
+                                    <li id="menu-item-11246" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-11246"><a href="/wp-include/projects/project1.html">1-系统认知与安装</a></li>
+                                    <li id="menu-item-11247" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-11247"><a href="/wp-include/projects/project2.html">2-RGB LED</a></li>
+                                    <li id="menu-item-11248" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-11248"><a href="/wp-include/projects/project3.html/">3-电位器与光敏电阻器的控制应用</a></li>
+                                    <li id="menu-item-11249" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-11248"><a href="/wp-include/projects/project4.html">4-超音波感测模组的控制应用</a></li>
+                                    <li id="menu-item-11250" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-11248"><a href="/wp-include/projects/project5.html">5-人体感测器的控制应用</a></li>
+                                    <li id="menu-item-11251" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-11248"><a href="/wp-include/projects/project6.html">6-温度感测器的控制应用</a></li>
+                                    <li id="menu-item-11252" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-11248"><a href="/wp-include/projects/project7.html">7-Wifi控制舵机</a></li>
+                                </ul>
+                            </li>
+
+                            <li id="menu-item-180" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-180" aria-haspopup="true"><a href="/wp-include/Arduino/ArduinoTitle.html">Arduino开发</a><button class="dropdown-toggle" aria-expanded="false"><span class="screen-reader-text">展开子菜单</span></button>
+                                <ul class="sub-menu">
+                                    <li id="menu-item-11244" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-11244"><a href="/wp-include/Arduino/Language.html">编程语句讲解</a></li>
+                                </ul>
+                            </li>
+                            <li id="menu-item-11817" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-11817"><a href="/wp-include/else/tutorials.html">教程说明</a></li>
+                            <li id="menu-item-1383" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1383"><a href="/wp-include/else/us.html">关于我们</a></li>
+                        </ul></div>							</nav><!-- .main-navigation -->
+
+                </div><!-- .site-header-menu -->
+            </div><!-- .site-header-main -->
+
+        </header><!-- .site-header -->
+
+        <div id="content" class="site-content">
+
+            <div id="primary" class="content-area">
+                <main id="main" class="site-main" role="main">
+
+                    <article id="post-12200" class="post-12200 page type-page status-publish hentry">
+                        <header class="entry-header">
+                            <h1 class="entry-title">Wifi控制舵机</h1>	</header><!-- .entry-header -->
+
+
+                        <div class="entry-content" id = "section1">
+                            <p><a href="/index.html">首页</a> / 本页</p>
+                            <a rel="noopener" target="_blank">
+                                <h1>软件准备</h1>
+                            </a>
+                            <div>
+                                Blinker点灯科技
+                            </div>
+                            <div id = "section2">
+                                <a rel="noopener" target="_blank">
+                                    <h1>硬件准备</h1>
+                                </a>
+                            </div>
+                            <div>
+                                Esp8266一个<br>
+                                舵机一个
+                            </div>
+                            <div id = "section3">
+                                <a rel="noopener" target="_blank">
+                                    <h1>函数库下载</h1>
+                                </a>
+                            </div>
+                            <div>
+                                右上角设置-管理库<br>
+                                <img src="/wp-include/pages/p7/7-1.png" class="img-responsive img-with-text">
+                            </div>
+                            
+                            <div>
+                                找到Blinker点灯物联下载
+                            </div>
+                            <img src="/wp-include/pages/p7/7-2.png" class="img-responsive img-with-text">
+                            <div id = "section4">
+                                <a rel="noopener" target="_blank">
+                                    <h1>代码如下</h1>
+                                </a>
+                            </div>
+                            <img src="/wp-include/pages/p7/7-3.png" class="img-responsive img-with-text"><br>
+                            <img src="/wp-include/pages/p7/7-4.png" class="img-responsive img-with-text"><br>
+                            <img src="/wp-include/pages/p7/7-5.png" class="img-responsive img-with-text">
+                            <div id = "section5">
+                                <a rel="noopener" target="_blank">
+                                    <h1>界面设置</h1>
+                                </a>
+                            </div>
+                            <img src="/wp-include/pages/p7/7-6.jpg" class="img-responsive img-with-text">
+                            <img src="/wp-include/pages/p7/7-7.jpg" class="img-responsive img-with-text">
+                            <img src="/wp-include/pages/p7/7-8.png" class="img-responsive img-with-text">
+                        </div><!-- .entry-content -->
+
+
+                    </article><!-- #post-12200 -->
+
+                </main><!-- .site-main -->
+
+
+            </div><!-- .content-area -->
+
+
+            <aside id="secondary" class="sidebar widget-area" role="complementary">
+                <section id="search-2" class="widget widget_search">
+                    <form role="search" method="get" class="search-form" action="/index.html">
+                        <label>
+                            <span class="screen-reader-text">搜索：</span>
+                            <input type="search" class="search-field" placeholder="搜索…" value="" name="s">
+                        </label>
+                        <button type="submit" class="search-submit"><span class="screen-reader-text">搜索</span></button>
+                    </form>
+                </section><section id="text-4" class="widget widget_text"><h2 class="widget-title">目录</h2>
+                <div id="table-of-contents">
+                    <a href="#section1">软件准备</a><br>
+                    <a href="#section2">硬件准备</a><br>
+                    <a href="#section3">函数库下载</a><br>
+                    <a href="#section4">代码如下</a><br>
+                    <a href="#section5">界面设置</a><br>
+                </div>
+            </section><section id="text-14" class="widget widget_text"><h2 class="widget-title">版权声明</h2>			<div class="textwidget"><p><span style="color: #2e93ec;"><strong>本网站访问者可将本网站提供的内容或服务用于个人学习研究以及其他非商业性或非盈利性用途。除此以外,将本网站任何内容（包括图片，文字，视频，程序代码，电路设计）或服务用于任何商业或盈利用途时,须征得本网站及相关权利人的书面许可。</strong></span></p>
+            </div>
+            </section>	</aside><!-- .sidebar .widget-area -->
+
+        </div><!-- .site-content -->
+
+        <footer id="colophon" class="site-footer" role="contentinfo">
+            <nav class="main-navigation" role="navigation" aria-label="页脚主菜单">
+                <div class="menu-%e7%ab%99%e7%82%b9%e5%af%bc%e8%88%aa-container"><ul id="menu-%e7%ab%99%e7%82%b9%e5%af%bc%e8%88%aa-1" class="primary-menu"><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-12974" aria-haspopup="true"><a href="/index.html">北岭山创客未来</a><button class="dropdown-toggle" aria-expanded="false"><span class="screen-reader-text">展开子菜单</span></button>
+                </li>
+                    <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-11817"><a href="/wp-include/else/tutorials.html">教程说明</a></li>
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1383"><a href="/wp-include/else/us.html">关于我们</a></li>
+                </ul></div>				</nav><!-- .main-navigation -->
+
+
+            <div class="site-info">
+                <span class="site-title"><a href="/index.html" rel="home">北岭山创客未来</a></span>
+                <a href="https://cn.wordpress.org/" class="imprint">
+                    自豪				</a>
+            </div><!-- .site-info -->
+        </footer><!-- .site-footer -->
+    </div><!-- .site-inner -->
+</div><!-- .site -->
+
+<script src="/js/skip-link-focus-fix.js?ver=20170530" id="twentysixteen-skip-link-focus-fix-js"></script>
+<script id="twentysixteen-script-js-extra">
+    var screenReaderText = {"expand":"\u5c55\u5f00\u5b50\u83dc\u5355","collapse":"\u6298\u53e0\u5b50\u83dc\u5355"};
+</script>
+<script src="/js/functions.js?ver=20181217" id="twentysixteen-script-js"></script>
+<script src="/js/wp-embed.min.js?ver=5.7.12" id="wp-embed-js"></script>
+<script type="text/javascript">
+    document.addEventListener('scroll', function() {
+        // 获取滚动位置的比例
+        const scrollTop = window.scrollY || window.pageYOffset;
+        const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+        const scrollRatio = scrollTop / maxScroll;
+
+        // 计算新的灰色值
+        const greyValue = Math.floor(200 + (55 * scrollRatio)); // 从浅灰色到深灰色的渐变
+
+        // 更新背景颜色
+        document.body.style.background = `linear-gradient(to right, rgb(${greyValue}, ${greyValue}, ${greyValue}), rgb(${255 - greyValue}, ${255 - greyValue}, ${255 - greyValue}))`;
+    });
+
+    jQuery(document).ready(function ($) {
+        //$( document ).ajaxStart(function() {
+        //});
+
+
+        for (var i = 0; i < document.forms.length; ++i) {
+            var form = document.forms[i];
+            if ($(form).attr("method") != "get") { $(form).append('<input type="hidden" name="bTFqZyorUOX" value="BJFoib" />'); }
+            if ($(form).attr("method") != "get") { $(form).append('<input type="hidden" name="RzsnLXJh" value="kb8CXEVP" />'); }
+        }
+
+
+        $(document).on('submit', 'form', function () {
+            if ($(this).attr("method") != "get") { $(this).append('<input type="hidden" name="bTFqZyorUOX" value="BJFoib" />'); }
+            if ($(this).attr("method") != "get") { $(this).append('<input type="hidden" name="RzsnLXJh" value="kb8CXEVP" />'); }
+            return true;
+        });
+
+
+        jQuery.ajaxSetup({
+            beforeSend: function (e, data) {
+
+                //console.log(Object.getOwnPropertyNames(data).sort());
+                //console.log(data.type);
+
+                if (data.type !== 'POST') return;
+
+                if (typeof data.data === 'object' && data.data !== null) {
+                    data.data.append("bTFqZyorUOX", "BJFoib");
+                    data.data.append("RzsnLXJh", "kb8CXEVP");
+                }
+                else {
+                    data.data =  data.data + '&bTFqZyorUOX=BJFoib&RzsnLXJh=kb8CXEVP';
+                }
+            }
+        });
+
+    });
+    function addLineNumbers() {
+        const containers = document.querySelectorAll('.code-container');
+        containers.forEach(container => {
+            const code = container.querySelector('.code').textContent.split('\n');
+            const lineNumbers = container.querySelector('.line-numbers');
+            lineNumbers.innerHTML = code.map((_, i) => `<span>${i + 1}</span>`).join('');
+        });
+    }
+
+    addLineNumbers();
+</script>
+
+
+</body></html>

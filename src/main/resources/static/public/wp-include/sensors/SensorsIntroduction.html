@@ -68,6 +68,49 @@
             position: relative;
             overflow: hidden; /* 确保绝对定位的元素不会超出图片范围 */
         }
+
+
+        //.site-header {
+        //    background-color: transparent; /* 页眉背景颜色 */
+        //    padding: 10px; /* 页眉内边距 */
+        //    border-left: 2px solid transparent; /* 页眉左边框 */
+        //    position: fixed; /* 固定在页面右边 */
+        //    top: 0; /* 从页面顶部开始 */
+        //    right: 0; /* 固定到页面右边 */
+        //    height: 100%; /* 占据页面右侧的整个高度 */
+        //    width: 200px; /* 页眉宽度 */
+        //    box-sizing: border-box;
+        //    z-index: 1000; /* 确保页眉在其他内容之上 */
+        //    display: flex; /* 使用 flex 布局 */
+        //    flex-direction: column; /* 垂直排列内容 */
+        //}
+        //.site-header-main {
+        //    position: absolute;
+        //    top: 10px; /* 调整距离顶部的间距 */
+        //    right: 25px; /* 调整距离右侧的间距 */
+        //}
+        //.site-branding {
+        //    text-align: center; /* 文字在页眉中居中 */
+        //}
+        //
+        //.site-title,
+        //.site-description {
+        //    display: block; /* 让文字按行排列 */
+        //    margin: 10px 0; /* 增加文字间距 */
+        //}
+        //
+        //.site-title a {
+        //    text-decoration: none;
+        //    color: #333;
+        //    font-size: 35px; /* 标题字体大小 */
+        //    font-weight: bold;
+        //}
+        //
+        //.site-description {
+        //    color: #777;
+        //    font-size: 14px; /* 描述字体大小 */
+        //}
+        //
     </style>
     <link rel="stylesheet" id="crayon-css" href="/css/crayon.min.css" media="all">
     <link rel="stylesheet" id="wp-block-library-css" href="/css/twentysixteen/style.min.css" media="all">
@@ -109,6 +152,11 @@
 </head>
 
 <body class="page-template-default page page-id-12200 page-parent page-child parent-pageid-5645 custom-background wp-embed-responsive">
+
+<div id="floating-window" style="position: fixed; bottom: 70%; right: 20px; width: 30px; height: 100px; background-color: transparent; display: flex; justify-content: center; align-items: center; border-radius: 10px; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); z-index: 999; cursor: pointer; writing-mode: vertical-rl; transform: rotate(360deg);">
+    <a href="/wp-include/else/download.html" target="_blank" style="text-decoration: none; color: #333; font-size: 16px; writing-mode: vertical-rl;">下载链接</a>
+</div>
+
 <div id="page" class="site">
     <div class="site-inner">
         <a class="skip-link screen-reader-text" href="#content">跳至内容</a>
@@ -116,7 +164,6 @@
         <header id="masthead" class="site-header" role="banner">
             <div class="site-header-main">
                 <div class="site-branding">
-
                     <p class="site-title"><a href="/index.html" rel="home">北岭山创客未来</a></p>
                     <p class="site-description">Arduino集成传感器教学开发板</p>
                 </div><!-- .site-branding -->
@@ -142,7 +189,7 @@
                                     <li id="menu-item-11249" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-11248"><a href="/wp-include/projects/project4.html">4-超音波感测模组的控制应用</a></li>
                                     <li id="menu-item-11250" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-11248"><a href="/wp-include/projects/project5.html">5-人体感测器的控制应用</a></li>
                                     <li id="menu-item-11251" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-11248"><a href="/wp-include/projects/project6.html">6-温度感测器的控制应用</a></li>
-                                    <li id="menu-item-11252" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-11248"><a href="/wp-include/projects/project7.html">7-蓝牙的控制应用</a></li>
+                                    <li id="menu-item-11252" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-11248"><a href="/wp-include/projects/project7.html">7-Wifi控制舵机</a></li>
                                 </ul>
                             </li>
 
