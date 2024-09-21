@@ -23,6 +23,16 @@
             background: none !important;
             padding: 0 !important;
         }
+        /* 增大主菜单标题的字体大小，并向上移动 */
+        #site-navigation .primary-menu a {
+            font-size: 20px; /* 调整字体大小 */
+            margin-top: -10px; /* 调整标题向上的位置，具体值可以根据需要进行修改 */
+            font-weight: 400; /* 设置字体粗细，700表示粗体 */
+        }
+        /* 如果想调整整体导航菜单的偏移 */
+        #site-header-menu {
+            margin-top: -20px; /* 向上移动整个菜单 */
+        }
         #secondary {
             position: sticky;
             top: 0;
@@ -81,7 +91,7 @@
                 <div class="site-branding">
 
                     <p class="site-title"><a href="/index.html" rel="home">北岭山创客未来</a></p>
-                    <p class="site-description">Arduino集成传感器教学开发板</p>
+                    <p class="site-description">Beiling Mountain Makers' Future</p>
                 </div><!-- .site-branding -->
 
                 <button id="menu-toggle" class="menu-toggle">菜单</button>
@@ -146,22 +156,7 @@
                                 </tr>
                                 </tbody>
                             </table>
-                            <table style="border: none;" width="100%" cellspacing="0" cellpadding="5">
-                                <tbody>
-                                <tr>
-                                    <td style="border: none; text-align: center;" valign="top" width="50%">
-                                        <p><a href="/wp-include/sensors/SensorsIntroduction.html" rel="noopener noreferrer" target="_blank"></a></p><figure id="attachment_11169" aria-describedby="caption-attachment-11169" style="width: 220px" class="wp-caption aligncenter"><a href="/wp-include/sensors/SensorsIntroduction.html" rel="noopener noreferrer" target="_blank"><img loading="lazy" class="size-full wp-image-11169" src="/wp-include/pages/1.gif" alt="传感器" width="220" height="220"  sizes="(max-width: 220px) 85vw, 220px"><figcaption id="caption-attachment-11169" class="wp-caption-text">跳转到传感器介绍主页</figcaption></a></figure></td>
-                                    <td style="border: none; text-align: center;" valign="top" width="50%">
-                                        <p><a href="/wp-include/projects/ProjectTitle.html" rel="noopener noreferrer" target="_blank"></a></p><figure id="attachment_3278" aria-describedby="caption-attachment-3278" style="width: 220px" class="wp-caption aligncenter"><a href="/wp-include/projects/ProjectTitle.html" rel="noopener noreferrer" target="_blank"><img loading="lazy" class="size-full wp-image-3278" src="/wp-include/pages/1.gif" alt="项目" width="220" height="220"><figcaption id="caption-attachment-3278" class="wp-caption-text">跳到项目主页</figcaption></a></figure></td>
-                                </tr>
-                                <tr>
-                                    <td style="border: none; text-align: center;" valign="top" width="50%">
-                                        <p></p><figure id="attachment_7778" aria-describedby="caption-attachment-7778" style="width: 220px" class="wp-caption aligncenter"><a href="/wp-include/Arduino/ArduinoTitle.html" target="_blank" rel="noopener noreferrer"><img loading="lazy" class="size-full wp-image-7778" src="/wp-include/pages/1.gif" alt="Arduino开发" width="220" height="220" sizes="(max-width: 220px) 85vw, 220px"></a><figcaption id="caption-attachment-7778" class="wp-caption-text">跳到Arduino开发主页</figcaption></figure></td>
-                                    <td style="border: none; text-align: center;" valign="top" width="50%">
-                                        <p></p><figure id="attachment_7276" aria-describedby="caption-attachment-7276" style="width: 220px" class="wp-caption aligncenter"><a href="/wp-include/else/us.html"><img loading="lazy" class="size-full wp-image-7276" src="/wp-include/pages/1.gif" alt="我们" width="220" height="220"  sizes="(max-width: 220px) 85vw, 220px"></a><figcaption id="caption-attachment-7276" class="wp-caption-text">跳到关于我们</figcaption></figure></td>
-                                </tr>
-                                </tbody>
-                            </table>
+
                         </div><!-- .entry-content -->
                     </article><!-- #post-151 -->
 

@@ -1,511 +1,323 @@
-<!doctype html>
-<html>
-<head>
-  <meta charset='UTF-8'><meta name='viewport' content='width=device-width initial-scale=1'>
-  <title>数据分析-聚类算法</title><link href='https://fonts.loli.net/css?family=Open+Sans:400italic,700italic,700,400&subset=latin,latin-ext' rel='stylesheet' type='text/css' /><style type='text/css'>html {overflow-x: initial !important;}:root { --bg-color:#ffffff; --text-color:#333333; --select-text-bg-color:#B5D6FC; --select-text-font-color:auto; --monospace:"Lucida Console",Consolas,"Courier",monospace; }
-html { font-size: 14px; background-color: var(--bg-color); color: var(--text-color); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
-body { margin: 0px; padding: 0px; height: auto; bottom: 0px; top: 0px; left: 0px; right: 0px; font-size: 1rem; line-height: 1.42857; overflow-x: hidden; background: inherit; tab-size: 4; }
-iframe { margin: auto; }
-a.url { word-break: break-all; }
-a:active, a:hover { outline: 0px; }
-.in-text-selection, ::selection { text-shadow: none; background: var(--select-text-bg-color); color: var(--select-text-font-color); }
-#write { margin: 0px auto; height: auto; width: inherit; word-break: normal; overflow-wrap: break-word; position: relative; white-space: normal; overflow-x: visible; padding-top: 40px; }
-#write.first-line-indent p { text-indent: 2em; }
-#write.first-line-indent li p, #write.first-line-indent p * { text-indent: 0px; }
-#write.first-line-indent li { margin-left: 2em; }
-.for-image #write { padding-left: 8px; padding-right: 8px; }
-body.typora-export { padding-left: 30px; padding-right: 30px; }
-.typora-export .footnote-line, .typora-export li, .typora-export p { white-space: pre-wrap; }
-@media screen and (max-width: 500px) {
-  body.typora-export { padding-left: 0px; padding-right: 0px; }
-  #write { padding-left: 20px; padding-right: 20px; }
-  .CodeMirror-sizer { margin-left: 0px !important; }
-  .CodeMirror-gutters { display: none !important; }
-}
-#write li > figure:last-child { margin-bottom: 0.5rem; }
-#write ol, #write ul { position: relative; }
-img { max-width: 100%; vertical-align: middle; }
-button, input, select, textarea { color: inherit; font: inherit; }
-input[type="checkbox"], input[type="radio"] { line-height: normal; padding: 0px; }
-*, ::after, ::before { box-sizing: border-box; }
-#write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p, #write pre { width: inherit; }
-#write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p { position: relative; }
-p { line-height: inherit; }
-h1, h2, h3, h4, h5, h6 { break-after: avoid-page; break-inside: avoid; orphans: 2; }
-p { orphans: 4; }
-h1 { font-size: 2rem; }
-h2 { font-size: 1.8rem; }
-h3 { font-size: 1.6rem; }
-h4 { font-size: 1.4rem; }
-h5 { font-size: 1.2rem; }
-h6 { font-size: 1rem; }
-.md-math-block, .md-rawblock, h1, h2, h3, h4, h5, h6, p { margin-top: 1rem; margin-bottom: 1rem; }
-.hidden { display: none; }
-.md-blockmeta { color: rgb(204, 204, 204); font-weight: 700; font-style: italic; }
-a { cursor: pointer; }
-sup.md-footnote { padding: 2px 4px; background-color: rgba(238, 238, 238, 0.7); color: rgb(85, 85, 85); border-radius: 4px; cursor: pointer; }
-sup.md-footnote a, sup.md-footnote a:hover { color: inherit; text-transform: inherit; text-decoration: inherit; }
-#write input[type="checkbox"] { cursor: pointer; width: inherit; height: inherit; }
-figure { overflow-x: auto; margin: 1.2em 0px; max-width: calc(100% + 16px); padding: 0px; }
-figure > table { margin: 0px !important; }
-tr { break-inside: avoid; break-after: auto; }
-thead { display: table-header-group; }
-table { border-collapse: collapse; border-spacing: 0px; width: 100%; overflow: auto; break-inside: auto; text-align: left; }
-table.md-table td { min-width: 32px; }
-.CodeMirror-gutters { border-right: 0px; background-color: inherit; }
-.CodeMirror-linenumber { user-select: none; }
-.CodeMirror { text-align: left; }
-.CodeMirror-placeholder { opacity: 0.3; }
-.CodeMirror pre { padding: 0px 4px; }
-.CodeMirror-lines { padding: 0px; }
-div.hr:focus { cursor: none; }
-#write pre { white-space: pre-wrap; }
-#write.fences-no-line-wrapping pre { white-space: pre; }
-#write pre.ty-contain-cm { white-space: normal; }
-.CodeMirror-gutters { margin-right: 4px; }
-.md-fences { font-size: 0.9rem; display: block; break-inside: avoid; text-align: left; overflow: visible; white-space: pre; background: inherit; position: relative !important; }
-.md-diagram-panel { width: 100%; margin-top: 10px; text-align: center; padding-top: 0px; padding-bottom: 8px; overflow-x: auto; }
-#write .md-fences.mock-cm { white-space: pre-wrap; }
-.md-fences.md-fences-with-lineno { padding-left: 0px; }
-#write.fences-no-line-wrapping .md-fences.mock-cm { white-space: pre; overflow-x: auto; }
-.md-fences.mock-cm.md-fences-with-lineno { padding-left: 8px; }
-.CodeMirror-line, twitterwidget { break-inside: avoid; }
-.footnotes { opacity: 0.8; font-size: 0.9rem; margin-top: 1em; margin-bottom: 1em; }
-.footnotes + .footnotes { margin-top: 0px; }
-.md-reset { margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: top; background: 0px 0px; text-decoration: none; text-shadow: none; float: none; position: static; width: auto; height: auto; white-space: nowrap; cursor: inherit; -webkit-tap-highlight-color: transparent; line-height: normal; font-weight: 400; text-align: left; box-sizing: content-box; direction: ltr; }
-li div { padding-top: 0px; }
-blockquote { margin: 1rem 0px; }
-li .mathjax-block, li p { margin: 0.5rem 0px; }
-li { margin: 0px; position: relative; }
-blockquote > :last-child { margin-bottom: 0px; }
-blockquote > :first-child, li > :first-child { margin-top: 0px; }
-.footnotes-area { color: rgb(136, 136, 136); margin-top: 0.714rem; padding-bottom: 0.143rem; white-space: normal; }
-#write .footnote-line { white-space: pre-wrap; }
-@media print {
-  body, html { border: 1px solid transparent; height: 99%; break-after: avoid; break-before: avoid; }
-  #write { margin-top: 0px; padding-top: 0px; border-color: transparent !important; }
-  .typora-export * { -webkit-print-color-adjust: exact; }
-  html.blink-to-pdf { font-size: 13px; }
-  .typora-export #write { padding-left: 32px; padding-right: 32px; padding-bottom: 0px; break-after: avoid; }
-  .typora-export #write::after { height: 0px; }
-}
-.footnote-line { margin-top: 0.714em; font-size: 0.7em; }
-a img, img a { cursor: pointer; }
-pre.md-meta-block { font-size: 0.8rem; min-height: 0.8rem; white-space: pre-wrap; background: rgb(204, 204, 204); display: block; overflow-x: hidden; }
-p > .md-image:only-child:not(.md-img-error) img, p > img:only-child { display: block; margin: auto; }
-p > .md-image:only-child { display: inline-block; width: 100%; }
-#write .MathJax_Display { margin: 0.8em 0px 0px; }
-.md-math-block { width: 100%; }
-.md-math-block:not(:empty)::after { display: none; }
-[contenteditable="true"]:active, [contenteditable="true"]:focus { outline: 0px; box-shadow: none; }
-.md-task-list-item { position: relative; list-style-type: none; }
-.task-list-item.md-task-list-item { padding-left: 0px; }
-.md-task-list-item > input { position: absolute; top: 0px; left: 0px; margin-left: -1.2em; margin-top: calc(1em - 10px); border: none; }
-.math { font-size: 1rem; }
-.md-toc { min-height: 3.58rem; position: relative; font-size: 0.9rem; border-radius: 10px; }
-.md-toc-content { position: relative; margin-left: 0px; }
-.md-toc-content::after, .md-toc::after { display: none; }
-.md-toc-item { display: block; color: rgb(65, 131, 196); }
-.md-toc-item a { text-decoration: none; }
-.md-toc-inner:hover { text-decoration: underline; }
-.md-toc-inner { display: inline-block; cursor: pointer; }
-.md-toc-h1 .md-toc-inner { margin-left: 0px; font-weight: 700; }
-.md-toc-h2 .md-toc-inner { margin-left: 2em; }
-.md-toc-h3 .md-toc-inner { margin-left: 4em; }
-.md-toc-h4 .md-toc-inner { margin-left: 6em; }
-.md-toc-h5 .md-toc-inner { margin-left: 8em; }
-.md-toc-h6 .md-toc-inner { margin-left: 10em; }
-@media screen and (max-width: 48em) {
-  .md-toc-h3 .md-toc-inner { margin-left: 3.5em; }
-  .md-toc-h4 .md-toc-inner { margin-left: 5em; }
-  .md-toc-h5 .md-toc-inner { margin-left: 6.5em; }
-  .md-toc-h6 .md-toc-inner { margin-left: 8em; }
-}
-a.md-toc-inner { font-size: inherit; font-style: inherit; font-weight: inherit; line-height: inherit; }
-.footnote-line a:not(.reversefootnote) { color: inherit; }
-.md-attr { display: none; }
-.md-fn-count::after { content: "."; }
-code, pre, samp, tt { font-family: var(--monospace); }
-kbd { margin: 0px 0.1em; padding: 0.1em 0.6em; font-size: 0.8em; color: rgb(36, 39, 41); background: rgb(255, 255, 255); border: 1px solid rgb(173, 179, 185); border-radius: 3px; box-shadow: rgba(12, 13, 14, 0.2) 0px 1px 0px, rgb(255, 255, 255) 0px 0px 0px 2px inset; white-space: nowrap; vertical-align: middle; }
-.md-comment { color: rgb(162, 127, 3); opacity: 0.8; font-family: var(--monospace); }
-code { text-align: left; vertical-align: initial; }
-a.md-print-anchor { white-space: pre !important; border-width: initial !important; border-style: none !important; border-color: initial !important; display: inline-block !important; position: absolute !important; width: 1px !important; right: 0px !important; outline: 0px !important; background: 0px 0px !important; text-decoration: initial !important; text-shadow: initial !important; }
-.md-inline-math .MathJax_SVG .noError { display: none !important; }
-.html-for-mac .inline-math-svg .MathJax_SVG { vertical-align: 0.2px; }
-.md-math-block .MathJax_SVG_Display { text-align: center; margin: 0px; position: relative; text-indent: 0px; max-width: none; max-height: none; min-height: 0px; min-width: 100%; width: auto; overflow-y: hidden; display: block !important; }
-.MathJax_SVG_Display, .md-inline-math .MathJax_SVG_Display { width: auto; margin: inherit; display: inline-block !important; }
-.MathJax_SVG .MJX-monospace { font-family: var(--monospace); }
-.MathJax_SVG .MJX-sans-serif { font-family: sans-serif; }
-.MathJax_SVG { display: inline; font-style: normal; font-weight: 400; line-height: normal; zoom: 90%; text-indent: 0px; text-align: left; text-transform: none; letter-spacing: normal; word-spacing: normal; overflow-wrap: normal; white-space: nowrap; float: none; direction: ltr; max-width: none; max-height: none; min-width: 0px; min-height: 0px; border: 0px; padding: 0px; margin: 0px; }
-.MathJax_SVG * { transition: none 0s ease 0s; }
-.MathJax_SVG_Display svg { vertical-align: middle !important; margin-bottom: 0px !important; margin-top: 0px !important; }
-.os-windows.monocolor-emoji .md-emoji { font-family: "Segoe UI Symbol", sans-serif; }
-.md-diagram-panel > svg { max-width: 100%; }
-[lang="mermaid"] svg, [lang="flow"] svg { max-width: 100%; height: auto; }
-[lang="mermaid"] .node text { font-size: 1rem; }
-table tr th { border-bottom: 0px; }
-video { max-width: 100%; display: block; margin: 0px auto; }
-iframe { max-width: 100%; width: 100%; border: none; }
-.highlight td, .highlight tr { border: 0px; }
-svg[id^="mermaidChart"] { line-height: 1em; }
-mark { background: rgb(255, 255, 0); color: rgb(0, 0, 0); }
-.md-html-inline .md-plain, .md-html-inline strong, mark .md-inline-math, mark strong { color: inherit; }
-mark .md-meta { color: rgb(0, 0, 0); opacity: 0.3 !important; }
+<html lang="zh-CN" class="js"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="profile" href="https://gmpg.org/xfn/11">
+    <link href='https://fonts.loli.net/css?family=Open+Sans:400italic,700italic,700,400&subset=latin,latin-ext' rel='stylesheet' type='text/css' />
+    <script>(function(html){html.className = html.className.replace(/\bno-js\b/,'js')})(document.documentElement);</script>
+    <title>Beiling Mountain Makers' Future – Arduino开发</title>
+    <meta name="robots" content="max-image-preview:large">
+    <link rel="dns-prefetch" href="//s.w.org">
+    <script>
+        window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/13.0.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/13.0.1\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/www.taichi-maker.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=5.7.12"}};
+        !function(e,a,t){var n,r,o,i=a.createElement("canvas"),p=i.getContext&&i.getContext("2d");function s(e,t){var a=String.fromCharCode;p.clearRect(0,0,i.width,i.height),p.fillText(a.apply(this,e),0,0);e=i.toDataURL();return p.clearRect(0,0,i.width,i.height),p.fillText(a.apply(this,t),0,0),e===i.toDataURL()}function c(e){var t=a.createElement("script");t.src=e,t.defer=t.type="text/javascript",a.getElementsByTagName("head")[0].appendChild(t)}for(o=Array("flag","emoji"),t.supports={everything:!0,everythingExceptFlag:!0},r=0;r<o.length;r++)t.supports[o[r]]=function(e){if(!p||!p.fillText)return!1;switch(p.textBaseline="top",p.font="600 32px Arial",e){case"flag":return s([127987,65039,8205,9895,65039],[127987,65039,8203,9895,65039])?!1:!s([55356,56826,55356,56819],[55356,56826,8203,55356,56819])&&!s([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]);case"emoji":return!s([55357,56424,8205,55356,57212],[55357,56424,8203,55356,57212])}return!1}(o[r]),t.supports.everything=t.supports.everything&&t.supports[o[r]],"flag"!==o[r]&&(t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&t.supports[o[r]]);t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&!t.supports.flag,t.DOMReady=!1,t.readyCallback=function(){t.DOMReady=!0},t.supports.everything||(n=function(){t.readyCallback()},a.addEventListener?(a.addEventListener("DOMContentLoaded",n,!1),e.addEventListener("load",n,!1)):(e.attachEvent("onload",n),a.attachEvent("onreadystatechange",function(){"complete"===a.readyState&&t.readyCallback()})),(n=t.source||{}).concatemoji?c(n.concatemoji):n.wpemoji&&n.twemoji&&(c(n.twemoji),c(n.wpemoji)))}(window,document,window._wpemojiSettings);
+    </script><script src="/js/wp-emoji-release.min.js" type="text/javascript" defer=""></script>
+    <style>
+        img.wp-smiley,
+        img.emoji {
+            display: inline !important;
+            border: none !important;
+            box-shadow: none !important;
+            height: 1em !important;
+            width: 1em !important;
+            margin: 0 .07em !important;
+            vertical-align: -0.1em !important;
+            background: none !important;
+            padding: 0 !important;
+        }
+        /* 增大主菜单标题的字体大小，并向上移动 */
+        #site-navigation .primary-menu a {
+            font-size: 20px; /* 调整字体大小 */
+            margin-top: -10px; /* 调整标题向上的位置，具体值可以根据需要进行修改 */
+            font-weight: 400; /* 设置字体粗细，700表示粗体 */
+        }
+        /* 如果想调整整体导航菜单的偏移 */
+        #site-header-menu {
+            margin-top: -20px; /* 向上移动整个菜单 */
+        }
+        #secondary {
+            position: sticky;
+            top: 0;
+        }
 
+        .code-container {
+            display: flex;
+            border: 1px solid #ccc;
+            padding: 10px;
+            font-family: monospace;
+            width: 80%; /* 设置代码块宽度为80% */
+            max-width: 600px; /* 设置最大宽度 */
+            //max-height: 400px; /* 设置最大高度 */
+            overflow: auto; /* 超出部分显示滚动条 */
+            //margin: 20px auto; /* 上下外边距20px，水平居中 */
+            background-color: rgba(128, 128, 128, 0.1); /* 半透明的灰色背景 */
+            border-radius: 8px; /* 设置圆角 */
+        }
 
-:root {
-  --side-bar-bg-color: #fafafa;
-  --control-text-color: #777;
-}
+        .line-numbers {
+            counter-reset: line;
+            padding-right: 10px;
+            border-right: 1px solid #ddd;
+            text-align: right;
+            color: gray;
+            padding-right: 5px; /* 行号区域右边距 */
+        }
 
-@include-when-export url(https://fonts.loli.net/css?family=Open+Sans:400italic,700italic,700,400&subset=latin,latin-ext);
+        .line-numbers span {
+            display: block;
+            counter-increment: line;
+            padding-right: 10px;
+        }
 
-html {
-  font-size: 16px;
-}
-
-body {
-  font-family: "Open Sans","Clear Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
-  color: rgb(51, 51, 51);
-  line-height: 1.6;
-}
-
-#write {
-  max-width: 860px;
-  margin: 0 auto;
-  padding: 30px;
-  padding-bottom: 100px;
-}
-#write > ul:first-child,
-#write > ol:first-child{
-  margin-top: 30px;
-}
-
-a {
-  color: #4183C4;
-}
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  position: relative;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  font-weight: bold;
-  line-height: 1.4;
-  cursor: text;
-}
-h1:hover a.anchor,
-h2:hover a.anchor,
-h3:hover a.anchor,
-h4:hover a.anchor,
-h5:hover a.anchor,
-h6:hover a.anchor {
-  text-decoration: none;
-}
-h1 tt,
-h1 code {
-  font-size: inherit;
-}
-h2 tt,
-h2 code {
-  font-size: inherit;
-}
-h3 tt,
-h3 code {
-  font-size: inherit;
-}
-h4 tt,
-h4 code {
-  font-size: inherit;
-}
-h5 tt,
-h5 code {
-  font-size: inherit;
-}
-h6 tt,
-h6 code {
-  font-size: inherit;
-}
-h1 {
-  padding-bottom: .3em;
-  font-size: 2.25em;
-  line-height: 1.2;
-  border-bottom: 1px solid #eee;
-}
-h2 {
-  padding-bottom: .3em;
-  font-size: 1.75em;
-  line-height: 1.225;
-  border-bottom: 1px solid #eee;
-}
-h3 {
-  font-size: 1.5em;
-  line-height: 1.43;
-}
-h4 {
-  font-size: 1.25em;
-}
-h5 {
-  font-size: 1em;
-}
-h6 {
-  font-size: 1em;
-  color: #777;
-}
-p,
-blockquote,
-ul,
-ol,
-dl,
-table{
-  margin: 0.8em 0;
-}
-li>ol,
-li>ul {
-  margin: 0 0;
-}
-hr {
-  height: 2px;
-  padding: 0;
-  margin: 16px 0;
-  background-color: #e7e7e7;
-  border: 0 none;
-  overflow: hidden;
-  box-sizing: content-box;
-}
-
-li p.first {
-  display: inline-block;
-}
-ul,
-ol {
-  padding-left: 30px;
-}
-ul:first-child,
-ol:first-child {
-  margin-top: 0;
-}
-ul:last-child,
-ol:last-child {
-  margin-bottom: 0;
-}
-blockquote {
-  border-left: 4px solid #dfe2e5;
-  padding: 0 15px;
-  color: #777777;
-}
-blockquote blockquote {
-  padding-right: 0;
-}
-table {
-  padding: 0;
-  word-break: initial;
-}
-table tr {
-  border-top: 1px solid #dfe2e5;
-  margin: 0;
-  padding: 0;
-}
-table tr:nth-child(2n),
-thead {
-  background-color: #f8f8f8;
-}
-table tr th {
-  font-weight: bold;
-  border: 1px solid #dfe2e5;
-  border-bottom: 0;
-  margin: 0;
-  padding: 6px 13px;
-}
-table tr td {
-  border: 1px solid #dfe2e5;
-  margin: 0;
-  padding: 6px 13px;
-}
-table tr th:first-child,
-table tr td:first-child {
-  margin-top: 0;
-}
-table tr th:last-child,
-table tr td:last-child {
-  margin-bottom: 0;
-}
-
-.CodeMirror-lines {
-  padding-left: 4px;
-}
-
-.code-tooltip {
-  box-shadow: 0 1px 1px 0 rgba(0,28,36,.3);
-  border-top: 1px solid #eef2f2;
-}
-
-.md-fences,
-code,
-tt {
-  border: 1px solid #e7eaed;
-  background-color: #f8f8f8;
-  border-radius: 3px;
-  padding: 0;
-  padding: 2px 4px 0px 4px;
-  font-size: 0.9em;
-}
-
-code {
-  background-color: #f3f4f4;
-  padding: 0 2px 0 2px;
-}
-
-.md-fences {
-  margin-bottom: 15px;
-  margin-top: 15px;
-  padding-top: 8px;
-  padding-bottom: 6px;
-}
-
-
-.md-task-list-item > input {
-  margin-left: -1.3em;
-}
-
-@media print {
-  html {
-    font-size: 13px;
-  }
-  table,
-  pre {
-    page-break-inside: avoid;
-  }
-  pre {
-    word-wrap: break-word;
-  }
-}
-
-.md-fences {
-  background-color: #f8f8f8;
-}
-#write pre.md-meta-block {
-  padding: 1rem;
-  font-size: 85%;
-  line-height: 1.45;
-  background-color: #f7f7f7;
-  border: 0;
-  border-radius: 3px;
-  color: #777777;
-  margin-top: 0 !important;
-}
-
-.mathjax-block>.code-tooltip {
-  bottom: .375rem;
-}
-
-.md-mathjax-midline {
-  background: #fafafa;
-}
-
-#write>h3.md-focus:before{
-  left: -1.5625rem;
-  top: .375rem;
-}
-#write>h4.md-focus:before{
-  left: -1.5625rem;
-  top: .285714286rem;
-}
-#write>h5.md-focus:before{
-  left: -1.5625rem;
-  top: .285714286rem;
-}
-#write>h6.md-focus:before{
-  left: -1.5625rem;
-  top: .285714286rem;
-}
-.md-image>.md-meta {
-  /*border: 1px solid #ddd;*/
-  border-radius: 3px;
-  padding: 2px 0px 0px 4px;
-  font-size: 0.9em;
-  color: inherit;
-}
-
-.md-tag {
-  color: #a7a7a7;
-  opacity: 1;
-}
-
-.md-toc {
-  margin-top:20px;
-  padding-bottom:20px;
-}
-
-.sidebar-tabs {
-  border-bottom: none;
-}
-
-#typora-quick-open {
-  border: 1px solid #ddd;
-  background-color: #f8f8f8;
-}
-
-#typora-quick-open-item {
-  background-color: #FAFAFA;
-  border-color: #FEFEFE #e5e5e5 #e5e5e5 #eee;
-  border-style: solid;
-  border-width: 1px;
-}
-
-/** focus mode */
-.on-focus-mode blockquote {
-  border-left-color: rgba(85, 85, 85, 0.12);
-}
-
-header, .context-menu, .megamenu-content, footer{
-  font-family: "Segoe UI", "Arial", sans-serif;
-}
-
-.file-node-content:hover .file-node-icon,
-.file-node-content:hover .file-node-open-state{
-  visibility: visible;
-}
-
-.mac-seamless-mode #typora-sidebar {
-  background-color: #fafafa;
-  background-color: var(--side-bar-bg-color);
-}
-
-.md-lang {
-  color: #b4654d;
-}
-
-.html-for-mac .context-menu {
-  --item-hover-bg-color: #E6F0FE;
-}
-
-#md-notification .btn {
-  border: 0;
-}
-
-.dropdown-menu .divider {
-  border-color: #e5e5e5;
-}
-
-.ty-preferences .window-content {
-  background-color: #fafafa;
-}
-
-.ty-preferences .nav-group-item.active {
-  color: white;
-  background: #999;
-}
-
-
-</style>
+        .code {
+            white-space: pre-wrap;
+            flex: 1;
+            padding-left: 10px; /* 代码区域左边距 */
+        }
+    </style>
+    <link rel="stylesheet" id="crayon-css" href="/css/crayon.min.css" media="all">
+    <link rel="stylesheet" id="wp-block-library-css" href="/css/twentysixteen/style.min.css" media="all">
+    <link rel="stylesheet" id="wp-block-library-theme-css" href="/css/theme.min.css" media="all">
+    <link rel="stylesheet" id="genericons-css" href="/Genericons/genericons.css?ver=20201208" media="all">
+    <link rel="stylesheet" id="twentysixteen-style-css" href="/css/twentysixteen/style.css?ver=20201208" media="all">
+    <link rel="stylesheet" id="twentysixteen-block-style-css" href="/css/twentysixteen/blocks.css?ver=20201208" media="all">
+    <!--[if lt IE 10]>
+    <link rel='stylesheet' id='twentysixteen-ie-css'  href='/css/ie.css' media='all' />
+    <![endif]-->
+    <!--[if lt IE 9]>
+    <link rel='stylesheet' id='twentysixteen-ie8-css'  href='/css/ie8.css' media='all' />
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel='stylesheet' id='twentysixteen-ie7-css'  href='/css/ie7.css' media='all' />
+    <![endif]-->
+    <script src="/js/jquery.min.js" id="jquery-core-js"></script>
+    <script src="/js/jquery-migrate.min.js" id="jquery-migrate-js"></script>
+    <script id="crayon_js-js-extra">
+        var CrayonSyntaxSettings = {"version":"_2.7.2_beta","is_admin":"0","ajaxurl":"/wp-admin/admin-ajax.php","prefix":"crayon-","setting":"crayon-setting","selected":"crayon-setting-selected","changed":"crayon-setting-changed","special":"crayon-setting-special","orig_value":"data-orig-value","debug":""};
+        var CrayonSyntaxStrings = {"copy":"Press %s to Copy, %s to Paste","minimize":"Click To Expand Code"};
+    </script>
+    <script src="/js/crayon.min.js" id="crayon_js-js"></script>
+    <!--[if lt IE 9]>
+    <script src='/js/html5.js' id='twentysixteen-html5-js'></script>
+    <![endif]-->
+    <style id="custom-background-css">
+        body.custom-background {
+            margin: 0;
+            height: 100vh; /* 确保背景覆盖整个视口 */
+            background: linear-gradient(to right, #b0b0b0, #40464d); /* 初始灰色渐变 */
+            transition: background 0.5s ease; /* 背景平滑过渡效果 */
+        }
+    </style>
+    <link rel="icon" href="/wp-include/pages/1.gif" sizes="32x32">
+    <link rel="icon" href="/wp-include/pages/1.gif" sizes="192x192">
+    <link rel="apple-touch-icon" href="/wp-include/pages/1.gif">
+    <meta name="msapplication-TileImage" content="/wp-include/pages/1.gif">
 </head>
-<body class='typora-export os-windows' >
-<div  id='write'  class = 'is-node'><h2><a name="聚类算法" class="md-header-anchor"></a><span>聚类算法</span></h2><h2><a name="11-聚类的定义" class="md-header-anchor"></a><strong><span>1.1 聚类的定义</span></strong></h2><p><code>聚类(Clustering)</code><span>是按照某个特定标准(如距离)把一个数据集分割成不同的类或簇，使得</span><strong><span>同一个簇内的数据对象的相似性尽可能大，同时不在同一个簇中的数据对象的差异性也尽可能地大</span></strong><span>。也即聚类后同一类的数据尽可能聚集到一起，不同类数据尽量分离。</span></p><h2><a name="12-聚类和分类的区别" class="md-header-anchor"></a><strong><span>1.2 聚类和分类的区别</span></strong></h2><ul><li><code>聚类(Clustering)</code><span>：是指把相似的数据划分到一起，具体划分的时候并不关心这一类的标签，目标就是把相似的数据聚合到一起，聚类是一种</span><code>无监督学习(Unsupervised Learning)</code><span>方法。</span></li><li><code>分类(Classification)</code><span>：是把不同的数据划分开，其过程是通过训练数据集获得一个分类器，再通过分类器去预测未知数据，分类是一种</span><code>监督学习(Supervised Learning)</code><span>方法。</span></li></ul><h2><a name="13-聚类的一般过程" class="md-header-anchor"></a><strong><span>1.3 聚类的一般过程</span></strong></h2><ol start='' ><li><span>数据准备：特征标准化和降维</span></li><li><span>特征选择：从最初的特征中选择最有效的特征，并将其存储在向量中</span></li><li><span>特征提取：通过对选择的特征进行转换形成新的突出特征</span></li><li><span>聚类：基于某种距离函数进行相似度度量，获取簇</span></li><li><span>聚类结果评估：分析聚类结果，如</span><code>距离误差和(SSE)</code><span>等</span></li></ol><h2><a name="14-数据对象间的相似度度量" class="md-header-anchor"></a><strong><span>1.4 数据对象间的相似度度量</span></strong></h2><p><span>对于数值型数据，可以使用下表中的相似度度量方法。</span></p><p><img src="https://pic3.zhimg.com/80/v2-921d5ff0b665e67d5df54047b9d6531a_1440w.webp" referrerpolicy="no-referrer"></p><p><code>Minkowski</code><span>距离就是Lp范数（n≥1)，而 </span><code>Manhattan</code><span> 距离、</span><code>Euclidean</code><span>距离、</span><code>Chebyshev</code><span>距离分别对应 p=1,2,∞时的情形。</span></p><h2><a name="15-cluster之间的相似度度量" class="md-header-anchor"></a><strong><span>1.5 cluster之间的相似度度量</span></strong></h2><p><span>除了需要衡量对象之间的距离之外，有些聚类算法（如层次聚类）还需要衡量</span><code>cluster</code><span>之间的距离 ，假设Ci和Cj 为两个 </span><code>cluster</code><span>，则前四种方法定义的 Ci和 Cj 之间的距离如下表所示。</span></p><p><img src="https://pic4.zhimg.com/80/v2-efc243a0fd595089412bd617eaa0d78b_1440w.webp" referrerpolicy="no-referrer"></p><ul><li><code>Single-link</code><span>定义两个</span><code>cluster</code><span>之间的距离为两个</span><code>cluster</code><span>之间距离最近的两个点之间的距离，这种方法会在聚类的过程中产生</span><code>链式效应</code><span>，即有可能会出现非常大的</span><code>cluster</code></li><li><code>Complete-link</code><span>定义的是两个</span><code>cluster</code><span>之间的距离为两个</span><code>cluster</code><span>之间距离最远的两个点之间的距离，这种方法可以避免</span><code>链式效应</code><span>,对异常样本点（不符合数据集的整体分布的噪声点）却非常敏感，容易产生不合理的聚类</span></li><li><code>UPGMA</code><span>正好是</span><code>Single-link</code><span>和</span><code>Complete-link</code><span>方法的折中，他定义两个</span><code>cluster</code><span>之间的距离为两个</span><code>cluster</code><span>之间所有点距离的平均值</span></li><li><span>最后一种</span><code>WPGMA</code><span>方法计算的是两个 </span><code>cluster</code><span> 之间两个对象之间的距离的加权平均值，加权的目的是为了使两个 </span><code>cluster</code><span> 对距离的计算的影响在同一层次上，而不受 </span><code>cluster</code><span> 大小的影响，具体公式和采用的权重方案有关。</span></li></ul><h2><a name="二数据聚类方法" class="md-header-anchor"></a><strong><span>二、数据聚类方法</span></strong></h2><p><span>数据聚类方法主要可以分为</span><code>划分式聚类方法(Partition-based Methods)</code><span>、</span><code>基于密度的聚类方法(Density-based methods)</code><span>、</span><code>层次化聚类方法(Hierarchical Methods)</code><span>等。</span></p><p><img src="https://pic4.zhimg.com/80/v2-05343ed3ff48cec83244ab64760acdeb_1440w.webp" referrerpolicy="no-referrer"></p><h2><a name="21-划分式聚类方法" class="md-header-anchor"></a><strong><span>2.1 划分式聚类方法</span></strong></h2><p><span>划分式聚类方法需要事先指定簇类的数目或者聚类中心，通过反复迭代，直至最后达到&quot;簇内的点足够近，簇间的点足够远&quot;的目标。经典的划分式聚类方法有</span><code>k-means</code><span>及其变体</span><code>k-means++</code><span>、</span><code>bi-kmeans</code><span>、</span><code>kernel k-means</code><span>等。</span></p><h3><a name="212-k-means算法" class="md-header-anchor"></a><strong><span>2.1.2 k-means算法</span></strong></h3><p><span>经典的</span><code>k-means</code><span>算法的流程如下：</span></p><p><img src="https://pic2.zhimg.com/80/v2-9a7fb4c3e6c18143890de949a309be21_1440w.webp" referrerpolicy="no-referrer"></p><p><span>经典</span><code>k-means</code><strong><a href='https://link.zhihu.com/?target=https%3A//github.com/HuStanding/nlp-exercise/blob/master/cluster/kmeans/kmeans.py'><span>源代码</span></a></strong><span>，下左图是原始数据集，通过观察发现大致可以分为4类，所以取k=4，测试数据效果如下右图所示。</span></p><p><img src="https://pic4.zhimg.com/80/v2-ed9693a3d8d82d6ebb459949ec475877_1440w.webp" referrerpolicy="no-referrer"></p><p><span>  </span></p><p><img src="https://pic4.zhimg.com/v2-f41b46d12b9d89937864cfb7b99d498b_b.jpg" referrerpolicy="no-referrer" alt="动图封面"></p><p><span>看起来很顺利，但事情并非如此，我们考虑</span><code>k-means</code><span>算法中最核心的部分，假设xi(i=1,2,…,n)是数据点，uj(j=1,2,…,n)是初始化的数据中心，那么我们的目标函数可以写成</span></p><p><span>![[Pasted image 20231026233542.png]]</span></p><p><span>这个函数是</span><strong><span>非凸优化函数</span></strong><span>，会收敛于局部最优解，可以参考</span><strong><a href='https://link.zhihu.com/?target=https%3A//math.stackexchange.com/questions/463453/how-to-see-that-k-means-objective-is-convex'><span>证明过程</span></a></strong><span>。举个例子 ，u1=[1,1],u2=[−1,−1]，则</span></p><p><span>![[Pasted image 20231026233615.png]]</span></p><p><span>该函数的曲线如下图所示</span></p><p><img src="https://pic1.zhimg.com/80/v2-7546836911d5c6cd10a663ac4f04fd1c_1440w.webp" referrerpolicy="no-referrer"></p><p><span>可以发现该函数有两个局部最优点，当时初始质心点取值不同的时候，最终的聚类效果也不一样，接下来我们看一个具体的实例。</span></p><p><img src="https://pic1.zhimg.com/80/v2-05589152e1293cb4193af61926eb478c_1440w.webp" referrerpolicy="no-referrer"></p><p><span>在这个例子当中，下方的数据应该归为一类，而上方的数据应该归为两类，这是由于初始质心点选取的不合理造成的误分。而k值的选取对结果的影响也非常大，同样取上图中数据集，取k=2,3,4，可以得到下面的聚类结果：</span></p><p><img src="https://pic2.zhimg.com/80/v2-18a21f32dcad2b997cb25ade06534451_1440w.webp" referrerpolicy="no-referrer"></p><p><span>一般来说，经典</span><code>k-means</code><span>算法有以下几个特点：</span></p><ol start='' ><li><span>需要提前确定k值</span></li><li><span>对初始质心点敏感</span></li><li><span>对异常数据敏感</span></li></ol><h3><a name="212-k-means算法-n69" class="md-header-anchor"></a><strong><span>2.1.2 k-means++算法</span></strong></h3><p><code>k-means++</code><span>是针对</span><code>k-means</code><span>中初始质心点选取的优化算法。该算法的流程和</span><code>k-means</code><span>类似，改变的地方只有初始质心的选取，该部分的算法流程如下</span></p><p><img src="https://pic2.zhimg.com/80/v2-62cfa5ed9ec45b638be17185375f3d4d_1440w.webp" referrerpolicy="no-referrer"></p><p><code>k-means++</code><strong><a href='https://link.zhihu.com/?target=https%3A//github.com/HuStanding/nlp-exercise/blob/master/cluster/kmeans/kmeans%252B%252B.py'><span>源代码</span></a></strong><span>，使用</span><code>k-means++</code><span>对上述数据做聚类处理，得到的结果如下</span></p><p><img src="https://pic2.zhimg.com/80/v2-d8f5868de9d99e980d157cd634564979_1440w.webp" referrerpolicy="no-referrer"></p><h3><a name="213-bi-kmeans算法" class="md-header-anchor"></a><strong><span>2.1.3 bi-kmeans算法</span></strong></h3><p><span>一种度量聚类效果的指标是</span><code>SSE(Sum of Squared Error)</code><span>，他表示聚类后的簇离该簇的聚类中心的平方和，</span><code>SSE</code><span>越小，表示聚类效果越好。 </span><code>bi-kmeans</code><span>是针对</span><code>kmeans</code><span>算法会陷入局部最优的缺陷进行的改进算法。该算法基于SSE最小化的原理，首先将所有的数据点视为一个簇，然后将该簇一分为二，之后选择其中一个簇继续进行划分，选择哪一个簇进行划分取决于对其划分是否能最大程度的降低</span><code>SSE</code><span>的值。</span></p><p><span>该算法的流程如下：</span></p><p><img src="https://pic2.zhimg.com/80/v2-213acdea55011ee7382bb327a75c3c59_1440w.webp" referrerpolicy="no-referrer"></p><p><code>k-means++</code><strong><a href='https://link.zhihu.com/?target=https%3A//github.com/HuStanding/nlp-exercise/blob/master/cluster/kmeans/kmeans%252B%252B.py'><span>源代码</span></a></strong><span>，利用</span><code>bi-kmeans</code><span>算法处理上节中的数据得到的结果如下图所示。</span></p><p><img src="https://pic4.zhimg.com/80/v2-e1e127fc6ccca98b9d722c0be2f428f3_1440w.webp" referrerpolicy="no-referrer"></p><p><span>这是一个全局最优的方法，所以每次计算出来的</span><code>SSE</code><span>值基本也是一样的（</span><strong><span>但是还是不排除有部分随机分错的情况</span></strong><span>），我们和前面的</span><code>k-means</code><span>、</span><code>k-means++</code><span>比较一下计算出来的</span><code>SSE</code><span>值</span></p><p><img src="https://pic3.zhimg.com/80/v2-5e60c9e9d1102da5d33ff1bb230f1932_1440w.webp" referrerpolicy="no-referrer"></p><p><span>可以看到，</span><code>k-means</code><span>每次计算出来的</span><code>SSE</code><span>都较大且不太稳定，</span><code>k-means++</code><span>计算出来的</span><code>SSE</code><span>较稳定并且数值较小，而</span><code>bi-kmeans</code><span> 4次计算出来的</span><code>SSE</code><span>都一样，并且计算的</span><code>SSE</code><span>都较小，说明聚类的效果也最好。</span></p><h2><a name="22-基于密度的方法" class="md-header-anchor"></a><strong><span>2.2 基于密度的方法</span></strong></h2><p><code>k-means</code><span>算法对于凸性数据具有良好的效果，能够根据距离来讲数据分为球状类的簇，但对于非凸形状的数据点，就无能为力了，当</span><code>k-means</code><span>算法在环形数据的聚类时，我们看看会发生什么情况。</span></p><p><img src="https://pic4.zhimg.com/80/v2-014e1a2055df95e067341cba1809a9af_1440w.webp" referrerpolicy="no-referrer"></p><p><span>从上图可以看到，</span><code>kmeans</code><span>聚类产生了错误的结果，这个时候就需要用到基于密度的聚类方法了，该方法需要定义两个参数ε和M，分别表示密度的邻域半径和邻域密度阈值。</span><code>DBSCAN</code><span>就是其中的典型。</span></p><h3><a name="221-dbscan算法" class="md-header-anchor"></a><strong><span>2.2.1 DBSCAN算法</span></strong></h3><p><span>首先介绍几个概念，考虑集合X={x(1),x(2),...,x(n)}，ε表示定义密度的邻域半径，设聚类的邻域密度阈值为M，有以下定义：</span></p><p><span>![[Pasted image 20231026234230.png]]</span>
-  <span>![[Pasted image 20231026234314.png]]</span></p><p><span>如下图所示，设M=3，则A为核心点，B、C是边界点，而N是噪声点。</span></p><p><img src="https://pic1.zhimg.com/80/v2-7efff68d8eada2472ed0a0372fa0b914_1440w.webp" referrerpolicy="no-referrer"></p><p><span>该算法的流程如下：</span></p><p><img src="https://pic4.zhimg.com/80/v2-bf830ddf519afae2d288a63d0f814b3b_1440w.webp" referrerpolicy="no-referrer"></p><p><span>构建ε邻域的过程可以使用</span><code>kd-tree</code><span>进行优化，循环过程可以使用</span><code>Numba、Cython、C</code><span>进行</span><strong><a href='https://link.zhihu.com/?target=https%3A//blog.csdn.net/weixin_38169413/article/details/102729497'><span>优化</span></a></strong><span>，</span><code>DBSCAN</code><span>的</span><strong><a href='https://link.zhihu.com/?target=https%3A//github.com/HuStanding/nlp-exercise/blob/master/cluster/dbscan/dbscan.py'><span>源代码</span></a></strong><span>，使用该节一开始提到的数据集，聚类效果如下</span></p><p><img src="https://pic4.zhimg.com/80/v2-6e982ce94516b6d3abd8c42483c9a6e3_1440w.webp" referrerpolicy="no-referrer"></p><p><span>聚类的过程示意图</span></p><p><img src="https://pic3.zhimg.com/v2-97265caf8e739000eadc8065dea6851a_b.jpg" referrerpolicy="no-referrer" alt="动图封面"></p><p><span>当设置不同的ε时，会产生不同的结果，如下图所示</span></p><p><img src="https://pic2.zhimg.com/80/v2-a38cd64b7d8c21e720f867a74218c145_1440w.webp" referrerpolicy="no-referrer"></p><p><span>当设置不同的M时，会产生不同的结果，如下图所示</span></p><p><img src="https://pic1.zhimg.com/80/v2-cd257a8c36168252fa3d83a9fe20a534_1440w.webp" referrerpolicy="no-referrer"></p><p><span>一般来说，</span><code>DBSCAN</code><span>算法有以下几个特点：</span></p><ol start='' ><li><span>需要提前确定ε和M值</span></li><li><span>不需要提前设置聚类的个数</span></li><li><span>对初值选取敏感，对噪声不敏感</span></li><li><span>对密度不均的数据聚合效果不好</span></li></ol><h3><a name="222-optics算法" class="md-header-anchor"></a><strong><span>2.2.2 OPTICS算法</span></strong></h3><p><span>在</span><code>DBSCAN</code><span>算法中，使用了统一的ε值，当数据密度不均匀的时候，如果设置了较小的ε值，则较稀疏的</span><code>cluster</code><span>中的节点密度会小于ε，会被认为是边界点而不被用于进一步的扩展；如果设置了较大的ε值，则密度较大且离的比较近的</span><code>cluster</code><span>容易被划分为同一个</span><code>cluster</code><span>，如下图所示。</span></p><p><img src="https://pic1.zhimg.com/80/v2-a86c5bee2e732de50dd5e8ba50f7ae68_1440w.webp" referrerpolicy="no-referrer"></p><ul><li><span>如果设置的ε较大，将会获得A,B,C这3个</span><code>cluster</code></li><li><span>如果设置的ε较小，将会只获得C1、C2、C3这3个</span><code>cluster</code></li></ul><p><span>对于密度不均的数据选取一个合适的ε是很困难的，对于高维数据，由于</span><strong><span>维度灾难(Curse of dimensionality)</span></strong><span>,ε的选取将变得更加困难。</span></p><p><span>怎样解决</span><code>DBSCAN</code><span>遗留下的问题呢？</span></p><blockquote><p><span>The basic idea to overcome these problems is to run an algorithm which produces a special order of the database with respect to its density-based clustering structure containing the information about every clustering level of the data set (up to a &quot;generating distance&quot; ε), and is very easy to analyze.  </span></p></blockquote><p><span>即能够提出一种算法，使得基于密度的聚类结构能够呈现出一种特殊的顺序，该顺序所对应的聚类结构包含了每个层级的聚类的信息，并且便于分析。</span></p><p><code>OPTICS(Ordering Points To Identify the Clustering Structure, OPTICS)</code><span>实际上是</span><code>DBSCAN</code><span>算法的一种有效扩展，主要解决对输入参数敏感的问题。即选取有限个邻域参数εi(0≤εi≤ε) 进行聚类，这样就能得到不同邻域参数下的聚类结果。</span></p><p><span>在介绍</span><code>OPTICS</code><span>算法之前，再扩展几个概念。</span></p><p><span>![[Pasted image 20231026235035.png]]</span>
-  <span>![[Pasted image 20231026235018.png]]</span></p><p><img src="https://pic1.zhimg.com/80/v2-a99c00a75727cdbed6fde4a95a862538_1440w.webp" referrerpolicy="no-referrer"></p><p><code>OPTICS</code><strong><a href='https://link.zhihu.com/?target=https%3A//github.com/HuStanding/nlp-exercise/blob/master/cluster/dbscan/optics.py'><span>源代码</span></a></strong><span>，算法流程如下：</span></p><p><img src="https://pic1.zhimg.com/80/v2-1e8fc7235869bbd28bb8a966d3587400_1440w.webp" referrerpolicy="no-referrer"></p><p><span>算法中有一个很重要的insert_list()函数，这个函数如下：</span></p><p><img src="https://pic1.zhimg.com/80/v2-9d2a7eb53ca16fb78eb7b18eb71ccd74_1440w.webp" referrerpolicy="no-referrer"></p><p><code>OPTICS</code><span>算法输出序列的过程：</span></p><p><img src="https://pic1.zhimg.com/v2-5a343fcf9224f75969149116b6bf2640_b.jpg" referrerpolicy="no-referrer" alt="动图封面"></p><p><span>该算法最终获取知识是一个</span><strong><span>输出序列</span></strong><span>，该序列按照密度不同将相近密度的点聚合在一起，而不是输出该点所属的具体类别，如果要获取该点所属的类型，需要再设置一个参数ε′(ε′≤ε)提取出具体的类别。这里我们举一个例子就知道是怎么回事了。</span></p><p><span>随机生成三组密度不均的数据，我们使用</span><code>DBSCAN</code><span>和</span><code>OPTICS</code><span>来看一下效果。</span></p><p><img src="https://pic4.zhimg.com/80/v2-e90887c2ae5e1eef15bfc2618d3983c3_1440w.webp" referrerpolicy="no-referrer"></p><p><img src="https://pic2.zhimg.com/80/v2-69630aca25c9de85ef8a2d1dd34cfcd1_1440w.webp" referrerpolicy="no-referrer"></p><p><span>可见，</span><code>OPTICS</code><span>第一步生成的输出序列较好的保留了各个不同密度的簇的特征，根据输出序列的可达距离图，再设定一个合理的ε′，便可以获得较好的聚类效果。</span></p><h2><a name="23-层次化聚类方法" class="md-header-anchor"></a><strong><span>2.3 层次化聚类方法</span></strong></h2><p><span>前面介绍的几种算法确实可以在较小的复杂度内获取较好的结果，但是这几种算法却存在一个</span><code>链式效应</code><span>的现象，比如：A与B相似，B与C相似，那么在聚类的时候便会将A、B、C聚合到一起，但是如果A与C不相似，就会造成聚类误差，严重的时候这个误差可以一直传递下去。为了降低</span><code>链式效应</code><span>，这时候层次聚类就该发挥作用了。</span></p><p><img src="https://pic3.zhimg.com/80/v2-0141f21130b60f7ac23fa05d7e417cee_1440w.webp" referrerpolicy="no-referrer"></p><p><strong><span>层次聚类算法 (hierarchical clustering)</span></strong><span> 将数据集划分为一层一层的 </span><code>clusters</code><span>，后面一层生成的 </span><code>clusters</code><span> 基于前面一层的结果。层次聚类算法一般分为两类：</span></p><ul><li><strong><span>Agglomerative 层次聚类</span></strong><span>：又称自底向上（bottom-up）的层次聚类，每一个对象最开始都是一个 </span><code>cluster</code><span>，每次按一定的准则将最相近的两个 </span><code>cluster</code><span> 合并生成一个新的 </span><code>cluster</code><span>，如此往复，直至最终所有的对象都属于一个 </span><code>cluster</code><span>。这里主要关注此类算法。</span></li><li><strong><span>Divisive 层次聚类</span></strong><span>： 又称自顶向下（top-down）的层次聚类，最开始所有的对象均属于一个 </span><code>cluster</code><span>，每次按一定的准则将某个 </span><code>cluster</code><span> 划分为多个 </span><code>cluster</code><span>，如此往复，直至每个对象均是一个 </span><code>cluster</code><span>。</span></li></ul><p><img src="https://pic2.zhimg.com/80/v2-be2a7cf798fdc983e6521a68b1eb952d_1440w.webp" referrerpolicy="no-referrer"></p><p><span>另外，需指出的是，层次聚类算法是一种贪心算法（greedy algorithm），因其每一次合并或划分都是基于某种局部最优的选择。</span></p><h3><a name="231-agglomerative算法" class="md-header-anchor"></a><strong><span>2.3.1 Agglomerative算法</span></strong></h3><p><span>给定数据集 X={x(1),x(2),...,x(n)}，</span><code>Agglomerative</code><span>层次聚类最简单的实现方法分为以下几步：</span></p><p><img src="https://pic3.zhimg.com/80/v2-da7329a152f5b9a4d7f4ccc7cbac117a_1440w.webp" referrerpolicy="no-referrer"></p><p><code>Agglomerative</code><span>算法</span><strong><a href='https://link.zhihu.com/?target=https%3A//github.com/HuStanding/nlp-exercise/blob/master/cluster/hierarchical/hierarchical.py'><span>源代码</span></a></strong><span>，可以看到，该 算法的时间复杂度为 O(n3) （由于每次合并两个 </span><code>cluster</code><span> 时都要遍历大小为 O(n2)的距离矩阵来搜索最小距离，而这样的操作需要进行 n−1 次），空间复杂度为O(n2) （由于要存储距离矩阵）。</span></p><p><img src="https://pic3.zhimg.com/80/v2-26d260f8cad14d0af66928e34fa8b68e_1440w.webp" referrerpolicy="no-referrer"></p><p><span>上图中分别使用了层次聚类中4个不同的</span><code>cluster</code><span>度量方法，可以看到，使用</span><code>single-link</code><span>确实会造成一定的链式效应，而使用</span><code>complete-link</code><span>则完全不会产生这种现象，使用</span><code>average-link</code><span>和</span><code>ward-link</code><span>则介于两者之间。</span></p><h2><a name="24-聚类方法比较" class="md-header-anchor"></a><strong><span>2.4 聚类方法比较</span></strong></h2><p><img src="https://pic2.zhimg.com/80/v2-04a2252ba991e07045613463e0414dc9_1440w.webp" referrerpolicy="no-referrer"></p></div>
-</body>
-</html>
+
+<body class="page-template-default page page-id-12200 page-parent page-child parent-pageid-5645 custom-background wp-embed-responsive">
+
+<div id="floating-window" style="position: fixed; bottom: 70%; right: 20px; width: 30px; height: 100px; background-color: transparent; display: flex; justify-content: center; align-items: center; border-radius: 10px; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); z-index: 999; cursor: pointer; writing-mode: vertical-rl; transform: rotate(360deg);">
+    <a href="/wp-include/else/download.html" target="_blank" style="text-decoration: none; color: #333; font-size: 16px; writing-mode: vertical-rl;">下载链接</a>
+</div>
+
+<div id="page" class="site">
+    <div class="site-inner">
+        <a class="skip-link screen-reader-text" href="#content">跳至内容</a>
+
+        <header id="masthead" class="site-header" role="banner">
+            <div class="site-header-main">
+                <div class="site-branding">
+
+                    <p class="site-title"><a href="/index.html" rel="home">北岭山创客未来</a></p>
+                    <p class="site-description">Beiling Mountain Makers' Future</p>
+                </div><!-- .site-branding -->
+
+                <button id="menu-toggle" class="menu-toggle">菜单</button>
+
+                <div id="site-header-menu" class="site-header-menu">
+                    <nav id="site-navigation" class="main-navigation" role="navigation" aria-label="主菜单">
+                        <div class="menu-%e7%ab%99%e7%82%b9%e5%af%bc%e8%88%aa-container"><ul id="menu-%e7%ab%99%e7%82%b9%e5%af%bc%e8%88%aa" class="primary-menu">
+                            <li id="menu-item-9846" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-9846"><a href="/wp-include/Arduino/introduce.html">arduino介绍</a></li>
+
+                            <li id="menu-item-9847" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-9847"><a href="/wp-include/sensors/SensorsIntroduction.html">传感器介绍</a></li>
+
+                            <li id="menu-item-9850" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-9850" aria-haspopup="true"><a href="/wp-include/projects/ProjectTitle.html">项目教程</a><button class="dropdown-toggle" aria-expanded="false"><span class="screen-reader-text">展开子菜单</span></button>
+                                <ul class="sub-menu">
+                                    <li id="menu-item-11246" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-11246"><a href="/wp-include/projects/project1.html">1-系统认知与安装</a></li>
+                                    <li id="menu-item-11247" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-11247"><a href="/wp-include/projects/project2.html">2-RGB LED</a></li>
+                                    <li id="menu-item-11248" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-11248"><a href="/wp-include/projects/project3.html/">3-电位器与光敏电阻器的控制应用</a></li>
+                                    <li id="menu-item-11249" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-11248"><a href="/wp-include/projects/project4.html">4-超音波感测模组的控制应用</a></li>
+                                    <li id="menu-item-11250" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-11248"><a href="/wp-include/projects/project5.html">5-人体感测器的控制应用</a></li>
+                                    <li id="menu-item-11251" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-11248"><a href="/wp-include/projects/project6.html">6-温度感测器的控制应用</a></li>
+                                    <li id="menu-item-11252" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-11248"><a href="/wp-include/projects/project7.html">7-Wifi控制舵机</a></li>
+                                </ul>
+                            </li>
+
+                            <li id="menu-item-180" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-180" aria-haspopup="true"><a href="/wp-include/Arduino/ArduinoTitle.html">Arduino开发</a><button class="dropdown-toggle" aria-expanded="false"><span class="screen-reader-text">展开子菜单</span></button>
+                                <ul class="sub-menu">
+                                    <li id="menu-item-11244" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-11244"><a href="/wp-include/Arduino/Language.html">编程语句讲解</a></li>
+                                </ul>
+                            </li>
+
+                            <li id="menu-item-1383" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1383"><a href="/wp-include/else/us.html">关于我们</a></li>
+                        </ul></div>							</nav><!-- .main-navigation -->
+
+                </div><!-- .site-header-menu -->
+            </div><!-- .site-header-main -->
+
+        </header><!-- .site-header -->
+
+        <div id="content" class="site-content">
+
+            <div id="primary" class="content-area">
+                <main id="main" class="site-main" role="main">
+
+                    <article id="post-12200" class="post-12200 page type-page status-publish hentry">
+                        <header class="entry-header">
+                            <h1 class="entry-title">系统认知与安装</h1>	</header><!-- .entry-header -->
+
+
+                        <div class="entry-content" id = "section1">
+                            <p><a href="/index.html">首页</a> / 本页</p>
+                            <a rel="noopener" target="_blank">
+                                <h1>Arduino IDE介绍</h1>
+                            </a>
+                            <img src="/wp-include/pages/p1/1.png" class="img-responsive img-with-text"><br>
+                            <img src="/wp-include/pages/p1/2.png" class="img-responsive img-with-text"><br>
+                            <img src="/wp-include/pages/p1/3.png" class="img-responsive img-with-text"><br>
+                            <img src="/wp-include/pages/p1/4.png" class="img-responsive img-with-text"><br>
+                            <img src="/wp-include/pages/p1/5.png" class="img-responsive img-with-text"><br>
+                            <hr>
+
+                            <div id = "section2">
+                                <a rel="noopener" target="_blank">
+                                    <h1>Mixly(米思奇)介绍</h1>
+                                </a>
+                            </div>
+                            <img src="/wp-include/pages/p1/6.png" class="img-responsive img-with-text"><br>
+                            <img src="/wp-include/pages/p1/7.png" class="img-responsive img-with-text"><br>
+                            <img src="/wp-include/pages/p1/8.png" class="img-responsive img-with-text"><br>
+                            <img src="/wp-include/pages/p1/9.png" class="img-responsive img-with-text"><br>
+                            <img src="/wp-include/pages/p1/10.png" class="img-responsive img-with-text"><br>
+
+
+                        </div><!-- .entry-content -->
+
+
+                    </article><!-- #post-12200 -->
+
+                </main><!-- .site-main -->
+
+
+            </div><!-- .content-area -->
+
+
+            <aside id="secondary" class="sidebar widget-area" role="complementary">
+                <section id="search-2" class="widget widget_search">
+                    <form role="search" method="get" class="search-form" action="/index.html">
+                        <label>
+                            <span class="screen-reader-text">搜索：</span>
+                            <input type="search" class="search-field" placeholder="搜索…" value="" name="s">
+                        </label>
+                        <button type="submit" class="search-submit"><span class="screen-reader-text">搜索</span></button>
+                    </form>
+                </section><section id="text-4" class="widget widget_text"><h2 class="widget-title">目录</h2>
+                <div id="table-of-contents">
+                    <a href="#section1">Arduino IDE介绍</a><br>
+                    <a href="#section2">Mixly(米思奇)介绍</a><br>
+                </div>
+            </section><section id="text-14" class="widget widget_text"><h2 class="widget-title">版权声明</h2>			<div class="textwidget"><p><span style="color: #2e93ec;"><strong>本网站访问者可将本网站提供的内容或服务用于个人学习研究以及其他非商业性或非盈利性用途。除此以外,将本网站任何内容（包括图片，文字，视频，程序代码，电路设计）或服务用于任何商业或盈利用途时,须征得本网站及相关权利人的书面许可。</strong></span></p>
+            </div>
+            </section>	</aside><!-- .sidebar .widget-area -->
+
+        </div><!-- .site-content -->
+
+        <footer id="colophon" class="site-footer" role="contentinfo">
+            <nav class="main-navigation" role="navigation" aria-label="页脚主菜单">
+                <div class="menu-%e7%ab%99%e7%82%b9%e5%af%bc%e8%88%aa-container"><ul id="menu-%e7%ab%99%e7%82%b9%e5%af%bc%e8%88%aa-1" class="primary-menu"><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-12974" aria-haspopup="true"><a href="/index.html">北岭山创客未来</a><button class="dropdown-toggle" aria-expanded="false"><span class="screen-reader-text">展开子菜单</span></button>
+                </li>
+                    <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-11817"><a href="/wp-include/else/tutorials.html">教程说明</a></li>
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1383"><a href="/wp-include/else/us.html">关于我们</a></li>
+                </ul></div>				</nav><!-- .main-navigation -->
+
+
+            <div class="site-info">
+                <span class="site-title"><a href="/index.html" rel="home">北岭山创客未来</a></span>
+                <a href="https://cn.wordpress.org/" class="imprint">
+                    自豪				</a>
+            </div><!-- .site-info -->
+        </footer><!-- .site-footer -->
+    </div><!-- .site-inner -->
+</div><!-- .site -->
+
+<script src="/js/skip-link-focus-fix.js?ver=20170530" id="twentysixteen-skip-link-focus-fix-js"></script>
+<script id="twentysixteen-script-js-extra">
+    var screenReaderText = {"expand":"\u5c55\u5f00\u5b50\u83dc\u5355","collapse":"\u6298\u53e0\u5b50\u83dc\u5355"};
+</script>
+<script src="/js/functions.js?ver=20181217" id="twentysixteen-script-js"></script>
+<script src="/js/wp-embed.min.js?ver=5.7.12" id="wp-embed-js"></script>
+<script type="text/javascript">
+    document.addEventListener('scroll', function() {
+        // 获取滚动位置的比例
+        const scrollTop = window.scrollY || window.pageYOffset;
+        const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+        const scrollRatio = scrollTop / maxScroll;
+
+        // 计算新的灰色值
+        const greyValue = Math.floor(200 + (55 * scrollRatio)); // 从浅灰色到深灰色的渐变
+
+        // 更新背景颜色
+        document.body.style.background = `linear-gradient(to right, rgb(${greyValue}, ${greyValue}, ${greyValue}), rgb(${255 - greyValue}, ${255 - greyValue}, ${255 - greyValue}))`;
+    });
+
+    jQuery(document).ready(function ($) {
+        //$( document ).ajaxStart(function() {
+        //});
+
+
+        for (var i = 0; i < document.forms.length; ++i) {
+            var form = document.forms[i];
+            if ($(form).attr("method") != "get") { $(form).append('<input type="hidden" name="bTFqZyorUOX" value="BJFoib" />'); }
+            if ($(form).attr("method") != "get") { $(form).append('<input type="hidden" name="RzsnLXJh" value="kb8CXEVP" />'); }
+        }
+
+
+        $(document).on('submit', 'form', function () {
+            if ($(this).attr("method") != "get") { $(this).append('<input type="hidden" name="bTFqZyorUOX" value="BJFoib" />'); }
+            if ($(this).attr("method") != "get") { $(this).append('<input type="hidden" name="RzsnLXJh" value="kb8CXEVP" />'); }
+            return true;
+        });
+
+
+        jQuery.ajaxSetup({
+            beforeSend: function (e, data) {
+
+                //console.log(Object.getOwnPropertyNames(data).sort());
+                //console.log(data.type);
+
+                if (data.type !== 'POST') return;
+
+                if (typeof data.data === 'object' && data.data !== null) {
+                    data.data.append("bTFqZyorUOX", "BJFoib");
+                    data.data.append("RzsnLXJh", "kb8CXEVP");
+                }
+                else {
+                    data.data =  data.data + '&bTFqZyorUOX=BJFoib&RzsnLXJh=kb8CXEVP';
+                }
+            }
+        });
+
+    });
+    function addLineNumbers() {
+        const containers = document.querySelectorAll('.code-container');
+        containers.forEach(container => {
+            const code = container.querySelector('.code').textContent.split('\n');
+            const lineNumbers = container.querySelector('.line-numbers');
+            lineNumbers.innerHTML = code.map((_, i) => `<span>${i + 1}</span>`).join('');
+        });
+    }
+
+    addLineNumbers();
+</script>
+
+
+</body></html>
